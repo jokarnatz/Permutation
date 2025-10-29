@@ -1,21 +1,32 @@
 from random import shuffle
 
-a, b, c, d, e, f, g, h, i = 0, 0, 1, 0, 0, 0, 1, 0, 1
+def create_vars():
+    p = [1,2,3,4,5,6,7,8,9]
+    a, b, c, d, e, f, g, h, i = p
+    var: list = [a,b,c,d,e,f,g,h,i]
+    TARGET_VALUE: int = 66
+    MAX_COUNTS = 300_000
+    return var, TARGET_VALUE, MAX_COUNTS
 
-num_list: list = [1,2,3,4,5,6,7,8,9]
-var: list = [a,b,c,d,e,f,g,h,i]
-mathm_expression = var[0] + 13 * var[1] / var[2] + var[3] / 12 * var[4] - var[5] - 11 / var[6] * var[7] / var[8] - 10
+def calculate_expression(var: list):
+    return var[0] + 13 * var[1] / var[2] + var[3] / 12 * var[4] - var[5] - 11 / var[6] * var[7] / var[8] - 10
 
-while mathm_expression != 66:
+def calculate_permutation(var: list, TARGET_VALUE: int, MAX_COUNTS):
     count = 0
-    shuffle(num_list)
-    for j in num_list:
-        for k in var:
-            var[k - 1] = j
-            if mathm_expression != 66:
-                count += 1
-                print(f"{count}: Testing number variation on expression.")
-            else:
-                print(f"Found a fitting variation:\n{num_list}")
-                print(eval(mathm_expression))
-                break
+    while True:
+        shuffle(var)
+        count += 1
+        mathm_expression = calculate_expression(var)
+        print(f"Testing {count}. permutation variation on expression.")
+        if MAX_COUNTS == count:
+            print(f"Reached maximum calculations: {count}\nExiting..")  
+            break
+        elif mathm_expression == TARGET_VALUE:
+            print(f"Found a fitting variation in run {count}:\n{' '.join(map(str,var))}")
+            print(f"{mathm_expression:g}")
+            break
+            
+                
+if __name__ == '__main__':
+    var, TARGET_VALUE, MAX_COUNTS = create_vars()
+    calculate_permutation(var, TARGET_VALUE, MAX_COUNTS)
