@@ -1,10 +1,26 @@
 from random import shuffle
+from time import sleep
+from sys import exit
 
-def create_vars():
+def get_input(prompt, datatype):
+    while True:
+        try:
+            value = datatype(input(prompt))
+            return value
+        except (ValueError, TypeError):
+            print("Invalid input.")
+        except KeyboardInterrupt:
+            print("Exiting..")
+            sleep(0.5)
+            exit(0)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+def create_vars(usr_choice):
     p = [1,2,3,4,5,6,7,8,9]
     a, b, c, d, e, f, g, h, i = p
     var: list = [a,b,c,d,e,f,g,h,i]
-    TARGET_VALUE: int = 66
+    TARGET_VALUE: int = usr_choice
     MAX_COUNTS = 300_000
     return var, TARGET_VALUE, MAX_COUNTS
 
@@ -19,7 +35,7 @@ def calculate_permutation(var: list, TARGET_VALUE: int, MAX_COUNTS):
         mathm_expression = calculate_expression(var)
         print(f"Testing {count}. permutation variation on expression.")
         if MAX_COUNTS == count:
-            print(f"Reached maximum calculations: {count}\nExiting..")  
+            print(f"Reached maximum calculations without result.\nExiting..")  
             break
         elif mathm_expression == TARGET_VALUE:
             print(f"Found a fitting variation in run {count}:\n{' '.join(map(str,var))}")
@@ -28,5 +44,6 @@ def calculate_permutation(var: list, TARGET_VALUE: int, MAX_COUNTS):
             
                 
 if __name__ == '__main__':
-    var, TARGET_VALUE, MAX_COUNTS = create_vars()
+    usr_choice = get_input("Choose a result number. Should be a small number: ", int)
+    var, TARGET_VALUE, MAX_COUNTS = create_vars(usr_choice)
     calculate_permutation(var, TARGET_VALUE, MAX_COUNTS)
